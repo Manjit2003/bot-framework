@@ -3,7 +3,7 @@ package service
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"net/http"
 
@@ -50,15 +50,16 @@ func (s *WhatsAppService) makeRequest(reqData *types.ReqParams) ([]byte, error) 
 	writer := multipart.NewWriter(payload)
 
 	for key, val := range reqData.Params {
+		if val == "" {
+			continue
+		}
 		fields[key] = val
 	}
 
-	fmt.Println(fields)
-
 	for key, val := range fields {
-		if val != "" {
-			_ = writer.WriteField(key, val)
-		}
+
+		_ = writer.WriteField(key, val)
+
 	}
 
 	err := writer.Close()
@@ -81,28 +82,10 @@ func (s *WhatsAppService) makeRequest(reqData *types.ReqParams) ([]byte, error) 
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
 	return body, nil
-}
-
-func (s *WhatsAppService) SendTextMessage(req *types.SendTextMessageParams) ([]byte, error) {
-
-	if req.PreviewUrl == "" {
-		req.PreviewUrl = "false"
-	}
-
-	return s.makeRequest(&types.ReqParams{
-		Params: map[string]string{
-			"msg":        req.Text,
-			"mobile":     req.To,
-			"previewUrl": req.PreviewUrl,
-			"header":     req.Header,
-			"footer":     req.Footer,
-			"msgType":    "text",
-		},
-	})
 }

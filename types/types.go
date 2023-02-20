@@ -14,10 +14,31 @@ type ServiceConfig struct {
 	WaBaNumber string
 }
 
-type SendTextMessageParams struct {
+type TextMessageParams struct {
 	To         string
 	Text       string
 	PreviewUrl string
 	Header     string
 	Footer     string
+}
+
+type ListRow struct {
+	Id          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"` // optional
+}
+
+type ListSection struct {
+	Title string    `json:"title"`
+	Rows  []ListRow `json:"rows"` // max 10 rows per section
+}
+
+type ListData struct {
+	ButtonText string        `json:"button"`
+	Sections   []ListSection `json:"sections"`
+}
+
+type ListMessageParams struct {
+	*TextMessageParams
+	ListData *ListData
 }
