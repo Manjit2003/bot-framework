@@ -42,3 +42,13 @@ type ListMessageParams struct {
 	*TextMessageParams
 	ListData *ListData
 }
+
+type DocumentData struct {
+	DocumentName string `json:"documentName"`
+	DocumentUrl  string `json:"documentUrl"`
+}
+
+type DocumentMessageParams struct {
+	*TextMessageParams
+	DocumentData *DocumentData
+}
