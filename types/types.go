@@ -52,3 +52,45 @@ type DocumentMessageParams struct {
 	*TextMessageParams
 	DocumentData *DocumentData
 }
+
+/*{
+  "buttons": [
+    {
+      "type": "reply",
+      "reply": {
+        "id": "id1",
+        "title": "Button1"
+      }
+    },
+    {
+      "type": "reply",
+      "reply": {
+        "id": "id2",
+        "title": "Button2"
+      }
+    },
+    {
+      "type": "reply",
+      "reply": {
+        "id": "id3",
+        "title": "Button3"
+      }
+    }
+  ]
+}*/
+
+type ButtonContent struct {
+	Id    string `json:"id"`
+	Title string `json:"title"`
+}
+
+type Button struct {
+	Type  string        `json:"type"`
+	Reply ButtonContent `json:"reply"`
+}
+
+type ButtonData struct {
+	*TextMessageParams
+	ButtonTitle string   `json:"-"`
+	Buttons     []Button `json:"buttons"`
+}

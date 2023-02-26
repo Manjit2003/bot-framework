@@ -48,6 +48,36 @@ func (s *WhatsAppService) SendListMessage(req *types.ListMessageParams) ([]byte,
 	})
 }
 
+func (s *WhatsAppService) SendButtonMessage(req *types.ButtonData) ([]byte, error) {
+
+	if req.PreviewUrl == "" {
+		req.PreviewUrl = "false"
+	}
+
+	payload := struct {
+		Buttons []types.Button `json:"buttons"`
+	}{
+		Buttons: req.Buttons,
+	}
+
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.makeRequest(&types.ReqParams{
+		Params: map[string]string{
+			"msg":            req.Text,
+			"mobile":         req.To,
+			"previewUrl":     req.PreviewUrl,
+			"header":         req.Header,
+			"footer":         req.Footer,
+			"msgType":        "reply",
+			"buttonsPayload": string(b),
+		},
+	})
+}
+
 func (s *WhatsAppService) SendDocumentMessage(req *types.DocumentMessageParams) ([]byte, error) {
 
 	if req.PreviewUrl == "" {
