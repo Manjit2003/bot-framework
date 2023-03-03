@@ -99,3 +99,25 @@ func (s *WhatsAppService) SendDocumentMessage(req *types.DocumentMessageParams) 
 		},
 	})
 }
+
+func (s *WhatsAppService) SendMediaMessage(req *types.MediaMessageParams) ([]byte, error) {
+
+	if req.PreviewUrl == "" {
+		req.PreviewUrl = "false"
+	}
+
+	return s.makeRequest(&types.ReqParams{
+		Params: map[string]string{
+			"msg":        req.Text,
+			"mobile":     req.To,
+			"previewUrl": req.PreviewUrl,
+			"header":     req.Header,
+			"footer":     req.Footer,
+			"msgType":    "media",
+			"mediaType":  string(req.MediaData.MediaType),
+			"caption":    req.Text,
+			"mediaUrl":   req.MediaData.MediaUrl,
+		},
+	})
+
+}

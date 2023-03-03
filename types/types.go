@@ -48,36 +48,29 @@ type DocumentData struct {
 	DocumentUrl  string `json:"documentUrl"`
 }
 
+type MediaType string
+
+const (
+	MediaTypeImage    MediaType = "image"
+	MediaTypeVideo    MediaType = "video"
+	MediaTypeAudio    MediaType = "audio"
+	MediaTypeDocument MediaType = "document"
+)
+
+type MediaData struct {
+	MediaUrl  string    `json:"mediaUrl"`
+	MediaType MediaType `json:"mediaType"`
+}
+
 type DocumentMessageParams struct {
 	*TextMessageParams
 	DocumentData *DocumentData
 }
 
-/*{
-  "buttons": [
-    {
-      "type": "reply",
-      "reply": {
-        "id": "id1",
-        "title": "Button1"
-      }
-    },
-    {
-      "type": "reply",
-      "reply": {
-        "id": "id2",
-        "title": "Button2"
-      }
-    },
-    {
-      "type": "reply",
-      "reply": {
-        "id": "id3",
-        "title": "Button3"
-      }
-    }
-  ]
-}*/
+type MediaMessageParams struct {
+	*TextMessageParams
+	MediaData *MediaData
+}
 
 type ButtonContent struct {
 	Id    string `json:"id"`
