@@ -70,6 +70,7 @@ type DocumentMessageParams struct {
 type MediaMessageParams struct {
 	*TextMessageParams
 	MediaData *MediaData
+	Buttons   []Button `json:"buttons"` // optional
 }
 
 type ButtonContent struct {

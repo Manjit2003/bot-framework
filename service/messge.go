@@ -106,7 +106,18 @@ func (s *WhatsAppService) SendMediaMessage(req *types.MediaMessageParams) ([]byt
 		req.PreviewUrl = "false"
 	}
 
-	return s.makeRequest(&types.ReqParams{
+	payload := struct {
+		Buttons []types.Button `json:"buttons"`
+	}{
+		Buttons: req.Buttons,
+	}
+
+	b, err := json.Marshal(payload)
+	if err != nil {
+		return nil, err
+	}
+
+	reqParams := &types.ReqParams{
 		Params: map[string]string{
 			"msg":        req.Text,
 			"mobile":     req.To,
@@ -118,6 +129,13 @@ func (s *WhatsAppService) SendMediaMessage(req *types.MediaMessageParams) ([]byt
 			"caption":    req.Text,
 			"mediaUrl":   req.MediaData.MediaUrl,
 		},
-	})
+	}
+
+	if len(req.Buttons) > 0 {
+		reqParams.Params["buttonsPayload"] = string(b)
+		reqParams.Params["msgType"] = "reply"
+	}
+
+	return s.makeRequest(reqParams)
 
 }
