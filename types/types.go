@@ -88,3 +88,13 @@ type ButtonData struct {
 	ButtonTitle string   `json:"-"`
 	Buttons     []Button `json:"buttons"`
 }
+
+type ContactMessageParams struct {
+	*TextMessageParams
+	ContactData *ContactData
+}
+
+type ContactData struct {
+	ContactName  string `json:"contactName"`
+	ContactPhone string `json:"contactPhone"`
+}
